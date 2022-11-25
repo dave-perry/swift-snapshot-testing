@@ -262,7 +262,13 @@ public func verifySnapshot<Value, Format>(
             """
       }
 
+	  let isAccessing = snapshotFileUrl.startAccessingSecurityScopedResource()
       let data = try Data(contentsOf: snapshotFileUrl)
+      
+      if isAccessing {
+        snapshotFileUrl.stopAccessingSecurityScopedResource()
+      }
+      
       let reference = snapshotting.diffing.fromData(data)
 
       #if os(iOS) || os(tvOS)
